@@ -1,0 +1,14 @@
+---
+-  name :  1. Configure ansible
+  gather_facts: false
+  hosts: localhost
+  roles:
+    - setting
+  tags: setting
+
+-  name :  2. Adding user management
+  gather_facts: false
+  hosts: all[1:]
+  roles:
+    -  addmanager
+  tags: addmanager

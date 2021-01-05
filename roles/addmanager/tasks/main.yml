@@ -1,0 +1,28 @@
+---
+-  name :  Create a sudo user management
+  user:
+    name: "{{ manager_user }}"
+    #password: "{{ password | password_hash('sha512') }}"
+    #update_password: always
+    generate_ssh_key: yes
+    state: present
+
+-  name :  Adding sudo privileges
+  lineinfile: dest=/etc/sudoers state=present  line='{{ item }}' validate='visudo -cf %s'
+  with_items:
+    - "Cmnd_Alias RYPTOZEE = ALL, !/usr/bin/passwd root, !/usr/sbin/visudo, !/usr/bin/rm -rf /, !/usr/bin/rm -rf /*"
+    - "%{{ manager_user }} ALL=(ALL) NOPASSWD: RYPTOZEE"
+
+- name: rsync root key
+  authorized_key:
+    user: root
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    state: present
+    #exclusive: yes
+
+- name: rsync sudo user key
+  authorized_key:
+    user: "{{ manager_user }}"
+    key: "{{ lookup('file', '/home/{{ manager_user }}/.ssh/id_rsa.pub') }}"
+    state: present
+    #exclusive: yes

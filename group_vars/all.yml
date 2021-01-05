@@ -1,0 +1,18 @@
+---
+# Need to install ansible first
+# yum install epel-release ansible -y
+
+#sudoManage users
+manager_user: ryptozee
+
+#Server ssh port
+ssh_port: '43999'
+
+#Ordinary users, log in through ordinary users, call sudo to manage users to perform management
+userlist:
+  - user: zee
+    pass: zeeg@ro.1
+  - user: maziv
+    pass: mazeeg@ro.1
+
+#/etc/ansible/inventory/default-hosts.ini Use the default hosts template for ordinary users, modify as needed
