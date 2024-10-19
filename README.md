@@ -1,31 +1,74 @@
-1, Verified environment:
-Centos 7
-ansible 2.9.10
+# README
 
-# Need to install ansible first, and create a root public key
+## Project: Ansible-Based Bastion Host Setup and Management
+
+### 1. Verified Environment
+- **Operating System**: CentOS 7
+- **Ansible Version**: 2.9.10
+
+Before starting, ensure that Ansible is installed and a root SSH key is generated:
+
+```bash
 yum install epel-release ansible -y
-
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''
+```
 
-2, About hosts
-2. 1 Modify hosts.ini as needed
-2. 2 hosts.ini first acts ansible server, fortress Machine Manager server
-2. 2 addnew is a new server added later
-2. 4 /etc/ansible/inventory/default-hosts.ini uses the default hosts template for ordinary users, modify as needed
+### 2. Host Configuration
 
-3, vars variable definition, can be modified as needed
-group_vars / all.yml
+#### 2.1 Modify `hosts.ini` as Needed
 
-4. Realize function
-4. 1 Batch synchronization of the bastion machine root user key to the server-mainly for the bastion machine root user operation management
-4. 2 Batch synchronization of the bastion host sudo management user key to the server-mainly for the sudo user operation management of ordinary users of the bastion host
-4. 3 Add ordinary users in batch
-4. 4 Quickly build a simple bastion server
+- The `hosts.ini` file defines the target machines for Ansible operations.
+  - The first machine listed acts as the **Ansible server**, also referred to as the **Fortress Machine Manager**.
+  - The `addnew` section is used for **new servers** added later.
 
-5. How to use
-ansible -i hosts.ini all -m ping #If you can ping normally, there is no problem with hosts.ini configuration
+#### 2.2 Default Hosts Template
+
+- A default hosts template is located at `/etc/ansible/inventory/default-hosts.ini`. This template is designed for ordinary users and should be modified according to your needs.
+
+### 3. Variables
+
+- Variables are defined in `group_vars/all.yml`. Modify this file as needed to set up custom variables for your environment.
+
+### 4. Features
+
+1. **Batch synchronization of the root user key**:
+   - Syncs the root SSH key from the bastion machine to target servers for root user management.
+
+2. **Batch synchronization of the sudo user key**:
+   - Syncs the sudo user’s SSH key to target servers for the management of ordinary users with sudo privileges.
+
+3. **Batch addition of ordinary users**:
+   - Adds multiple ordinary users across the servers using Ansible.
+
+4. **Quick setup of a simple bastion host**:
+   - Automatically deploys a basic bastion server setup.
+
+### 5. How to Use
+
+#### Checking Connectivity
+
+To verify that Ansible can reach all hosts defined in `hosts.ini`, run the following command:
+
+```bash
+ansible -i hosts.ini all -m ping
+```
+
+If the command successfully pings the target machines, your `hosts.ini` configuration is correct.
+
+#### Running the Playbook
+
+To run the Ansible playbook, use the following command:
+
+```bash
 ansible-playbook -i hosts.ini start.yml
+```
 
-6, add a new server
-6. 1. First add hosts.ini addnew
-6.2 ansible-playbook -i hosts.ini -l addnew start.yml -t addmanager
+### 6. Adding a New Server
+
+1. Add the new server under the `addnew` section in `hosts.ini`.
+
+2. Run the following command to apply the configuration to the new server:
+
+```bash
+ansible-playbook -i hosts.ini -l addnew start.yml -t addmanager
+```
