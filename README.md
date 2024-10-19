@@ -4,6 +4,7 @@ ansible 2.9.10
 
 # Need to install ansible first, and create a root public key
 yum install epel-release ansible -y
+
 ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''
 
 2, About hosts
