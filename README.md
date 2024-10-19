@@ -1,4 +1,4 @@
-## Project: Ansible-Based Bastion Host Setup and Management
+## Ansible-Based Bastion Host Setup and Management
 
 ### 1. Verified Environment
 - **Operating System**: CentOS 7
